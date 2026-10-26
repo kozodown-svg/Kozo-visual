@@ -2,6 +2,8 @@ package ru.kozo.dlc;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.Click;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
@@ -13,6 +15,7 @@ public class KozoScreen extends Screen {
 
     private int left;
     private int top;
+
     private final String[] modules = {
         "Watermark", "FPS Counter", "Ping", "Target HUD"
     };
@@ -89,10 +92,14 @@ public class KozoScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0) {
+    public boolean mouseClicked(Click click, boolean doubled) {
+        if (click.button() == 0) {
+            double mouseX = click.x();
+            double mouseY = click.y();
+
             for (int i = 0; i < modules.length; i++) {
                 int y = top + 48 + i * 35;
+
                 if (mouseX >= left + 100 && mouseX <= left + 328
                     && mouseY >= y && mouseY <= y + 29) {
                     toggle(i);
@@ -100,21 +107,23 @@ public class KozoScreen extends Screen {
                 }
             }
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+
+        return super.mouseClicked(click, doubled);
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_RIGHT_SHIFT
-            || keyCode == GLFW.GLFW_KEY_ESCAPE) {
+    public boolean keyPressed(KeyInput input) {
+        if (input.key() == GLFW.GLFW_KEY_RIGHT_SHIFT
+            || input.key() == GLFW.GLFW_KEY_ESCAPE) {
             close();
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+
+        return super.keyPressed(input);
     }
 
     @Override
     public boolean shouldPause() {
         return false;
     }
-}
+                }
